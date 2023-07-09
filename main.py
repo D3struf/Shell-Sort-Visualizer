@@ -13,7 +13,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 def shellSort(array):
     global COMPARISON
-    global figure1, bar1, set1
+    global figure1, bar1, set1, bar_container
     n = len(array)
     gap = n // 2
     x = np.arange(0, len(array), 1)
@@ -29,7 +29,8 @@ def shellSort(array):
             colors = ['gray'] * len(array)
             colors[z] = 'red'
             colors[z - gap] = 'red'
-            set1.bar(x, array, color=colors)
+            bar_container = set1.bar(x, array, color=colors)
+            set1.bar_label(bar_container, fmt='{:,.0f}')
             set1.axis('off')
             bar1.draw()
             window.update()
@@ -45,7 +46,8 @@ def shellSort(array):
                 colors = ['gray'] * len(array)
                 colors[j] = 'tab:orange'
                 colors[j + gap] = 'tab:blue'
-                set1.bar(x, array, color=colors)
+                bar_container = set1.bar(x, array, color=colors)
+                set1.bar_label(bar_container, fmt='{:,.0f}')
                 set1.axis('off')
                 bar1.draw()
                 window.update()
@@ -61,7 +63,8 @@ def shellSort(array):
                 colors[j - gap] = 'tab:green'
             else:
                 colors[gap - j] = 'tab:green'
-            set1.bar(x, array, color=colors)
+            bar_container = set1.bar(x, array, color=colors)
+            set1.bar_label(bar_container, fmt='{:,.0f}')
             set1.axis('off')
             bar1.draw()
             window.update()
@@ -109,7 +112,7 @@ if __name__ == "__main__":
     MAX = 100
     SPEED = 1
     X = 0
-    Y = 110
+    Y = 100
     elements = getInput("Enter number of Elements: ", 1)
 
     listOfElements = [] * elements
@@ -141,7 +144,8 @@ if __name__ == "__main__":
         set1.text(X, Y, 'COMPARISON: %s' % COMPARISON, fontsize=14, color='white')
         colors1 = ['grey'] * elements
         colors1[:k + 1] = ['green'] * (k + 1)
-        set1.bar(list(range(elements)), sortedArray, color=colors1)
+        bar_container = set1.bar(list(range(elements)), sortedArray, color=colors1)
+        set1.bar_label(bar_container, fmt='{:,.0f}')
         set1.axis('off')
         bar1.draw()
         window.update()
@@ -151,7 +155,8 @@ if __name__ == "__main__":
     set1.cla()
     set1.set_title("Shell Sort", fontsize=48, fontweight='bold')
     set1.text(X, Y, 'COMPARISON: %s' % COMPARISON, fontsize=14, color='white')
-    set1.bar(list(range(elements)), sortedArray, color="green")
+    bar_container = set1.bar(list(range(elements)), sortedArray, color="green")
+    set1.bar_label(bar_container, fmt='{:,.0f}')
     set1.axis('off')
     bar1.draw()
     window.update()

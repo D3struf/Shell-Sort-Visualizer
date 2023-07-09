@@ -7,10 +7,13 @@
 from random import randint
 import matplotlib.pyplot as plt
 import numpy as np
+import tkinter as tk
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
 def shellSort(array):
     global COMPARISON
+    global figure1, bar1, set1
     n = len(array)
     gap = n // 2
     x = np.arange(0, len(array), 1)
@@ -20,43 +23,49 @@ def shellSort(array):
             COMPARISON += 1
             temp = array[z]
             j = z
-            plt.title("Shell Sort", fontsize=48, fontweight='bold')
-            plt.text(X, Y, 'COMPARISON: %s' % COMPARISON, fontsize=14, color='white')
+            set1.cla()
+            set1.set_title("Shell Sort", fontsize=48, fontweight='bold')
+            set1.text(X, Y, 'COMPARISON: %s' % COMPARISON, fontsize=14, color='white')
             colors = ['gray'] * len(array)
             colors[z] = 'red'
             colors[z - gap] = 'red'
-            plt.bar(x, array, color=colors)
-            plt.axis('off')
-            plt.pause(SPEED)
-            plt.clf()
+            set1.bar(x, array, color=colors)
+            set1.axis('off')
+            bar1.draw()
+            window.update()
+            window.after(SPEED)
 
             while j >= gap and array[j - gap] > temp:
                 COMPARISON += 1
                 array[j] = array[j - gap]
                 j -= gap
-                plt.title("Shell Sort", fontsize=48, fontweight='bold')
-                plt.text(X, Y, 'COMPARISON: %s' % COMPARISON, fontsize=14, color='white')
+                set1.cla()
+                set1.set_title("Shell Sort", fontsize=48, fontweight='bold')
+                set1.text(X, Y, 'COMPARISON: %s' % COMPARISON, fontsize=14, color='white')
                 colors = ['gray'] * len(array)
                 colors[j] = 'tab:orange'
                 colors[j + gap] = 'tab:blue'
-                plt.bar(x, array, color=colors)
-                plt.axis('off')
-                plt.pause(SPEED)
-                plt.clf()
+                set1.bar(x, array, color=colors)
+                set1.axis('off')
+                bar1.draw()
+                window.update()
+                window.after(SPEED)
 
             array[j] = temp
-            plt.title("Shell Sort", fontsize=48, fontweight='bold')
-            plt.text(X, Y, 'COMPARISON: %s' % COMPARISON, fontsize=14, color='white')
+            set1.cla()
+            set1.set_title("Shell Sort", fontsize=48, fontweight='bold')
+            set1.text(X, Y, 'COMPARISON: %s' % COMPARISON, fontsize=14, color='white')
             colors = ['gray'] * len(array)
             colors[j] = 'tab:green'
             if j > gap:
                 colors[j - gap] = 'tab:green'
             else:
                 colors[gap - j] = 'tab:green'
-            plt.bar(x, array, color=colors)
-            plt.axis('off')
-            plt.pause(SPEED)
-            plt.clf()
+            set1.bar(x, array, color=colors)
+            set1.axis('off')
+            bar1.draw()
+            window.update()
+            window.after(SPEED)
 
         gap //= 2
 
@@ -92,10 +101,14 @@ def getInput(prompt, x):
 
 
 if __name__ == "__main__":
+    window = tk.Tk()
+    window.title("Shell Sort Visualizer")
+    window.geometry("1280x768")
+
     COMPARISON = 0
     MAX = 100
-    SPEED = 0.0000000000000000000001
-    X = -20
+    SPEED = 1
+    X = 0
     Y = 110
     elements = getInput("Enter number of Elements: ", 1)
 
@@ -114,21 +127,34 @@ if __name__ == "__main__":
 
     plt.rcParams['toolbar'] = 'None'
     plt.style.use('dark_background')
+    figure1 = plt.Figure(figsize=(6, 5), dpi=100)
+    set1 = figure1.add_subplot(111)
+
+    bar1 = FigureCanvasTkAgg(figure1, window)
+    bar1.get_tk_widget().pack(side="top", fill="both", expand=True)
+
     print("Unsorted List: ", listOfElements)
     sortedArray = shellSort(listOfElements)
     for k in range(elements):
-        plt.title("Shell Sort", fontsize=48, fontweight='bold')
-        plt.text(X, Y, 'COMPARISON: %s' % COMPARISON, fontsize=14, color='white')
+        set1.cla()
+        set1.set_title("Shell Sort", fontsize=48, fontweight='bold')
+        set1.text(X, Y, 'COMPARISON: %s' % COMPARISON, fontsize=14, color='white')
         colors1 = ['grey'] * elements
-        colors1[:k+1] = ['green'] * (k + 1)
-        plt.bar(list(range(elements)), sortedArray, color=colors1)
-        plt.axis('off')
-        plt.pause(SPEED)
-        plt.clf()
+        colors1[:k + 1] = ['green'] * (k + 1)
+        set1.bar(list(range(elements)), sortedArray, color=colors1)
+        set1.axis('off')
+        bar1.draw()
+        window.update()
+        window.after(SPEED)
 
     print("Sorted List: ", sortedArray)
-    plt.title("Shell Sort", fontsize=48, fontweight='bold')
-    plt.text(X, Y, 'COMPARISON: %s' % COMPARISON, fontsize=14, color='white')
-    plt.bar(list(range(elements)), sortedArray, color="green")
-    plt.axis('off')
-    plt.show()
+    set1.cla()
+    set1.set_title("Shell Sort", fontsize=48, fontweight='bold')
+    set1.text(X, Y, 'COMPARISON: %s' % COMPARISON, fontsize=14, color='white')
+    set1.bar(list(range(elements)), sortedArray, color="green")
+    set1.axis('off')
+    bar1.draw()
+    window.update()
+    window.after(10)
+
+    window.mainloop()
